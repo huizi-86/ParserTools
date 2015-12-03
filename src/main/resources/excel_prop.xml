@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<persist>
+    <apn>
+        <apntag name="operator" index="1"/>
+        <apntag name="carrier" index="2"/>
+        <apntag name="apn" index="3"/>
+        <apntag name="mcc" index="4"/>
+        <apntag name="mnc" index="5"/>
+
+        <apntag name="proxy" index="6"/>
+        <apntag name="port" index="7"/>
+        <!--mms-->
+        <apntag name="mms_proxy" index="8"/>
+        <apntag name="mms_port" index="9"/>
+        <apntag name="mmsc" index="10"/>
+        <!--user password -->
+        <apntag name="server" index="11"/>
+        <apntag name="user" index="12"/>
+        <apntag name="password" index="13"/>
+        <apntag name="authenType" index="14"/>
+
+        <apntag name="apnType" index="15"/>
+
+        <!--以下为虚拟运营商-->
+        <apntag name="mvno_typeype" index="-1"/>
+        <apntag name="mvno_match_data" index="-1"/>
+    </apn>
+
+    <spn>
+        <spntag name="mcc" index="0"/>
+        <spntag name="mnc" index="1"/>
+        <spntag name="spn" index="2"/>
+    </spn>
+
+</persist>
