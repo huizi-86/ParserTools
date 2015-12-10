@@ -1,3 +1,4 @@
+
 package com.wind.parser;
 
 import org.xml.sax.SAXException;
@@ -16,7 +17,7 @@ import jxl.read.biff.BiffException;
 public class MainClass {
 
     private static final int SHEET_INDEX = 0;
-    String TAG = "MainClass";
+    private final String TAG = "MainClass";
 
     public static void main(String[] args) {
         MainClass mc = new MainClass();
@@ -40,7 +41,7 @@ public class MainClass {
 
             xpp.parseIndex();
             Collection<PersistObjectBase> pobs = xpp.parseXml(sheet);
-//
+            //
             fos = new FileOutputStream(xpp.getOutFile());
             xpp.buildOutXml(fos, pobs);
 

@@ -1,8 +1,8 @@
+
 package com.wind.parser;
 
 /**
- * Created by sunhuihui on 2015/11/6.
- * 同步Excel中的SPN/APN各字段的索引与xml中参数index.
+ * Created by sunhuihui on 2015/11/6. 同步Excel中的SPN/APN各字段的索引与xml中参数index.
  */
 
 public class NameIndexMapping {

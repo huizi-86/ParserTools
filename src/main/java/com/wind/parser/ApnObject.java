@@ -1,3 +1,5 @@
+
+
 package com.wind.parser;
 
 /**
@@ -8,7 +10,7 @@ public class ApnObject extends PersistObjectBase {
     ApnObject() {
     }
 
-    // None:0, PAP:1  CHAP:2 PAP_CHAP:3
+    // None:0, PAP:1 CHAP:2 PAP_CHAP:3
     private String formatAuthType(String content) {
         if ("PAP/CHAP".equals(content)) {
             content = "3";
@@ -75,5 +77,4 @@ public class ApnObject extends PersistObjectBase {
             addPersist(new PersistAttribute(index, "mvno_match_data", text));
         }
     }
-
 }

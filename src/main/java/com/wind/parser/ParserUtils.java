@@ -1,3 +1,4 @@
+
 package com.wind.parser;
 
 /**
@@ -5,7 +6,7 @@ package com.wind.parser;
  */
 public class ParserUtils {
 
-    public static void log(String tag, String msg) {
+    public static void log(Object tag, String msg) {
         StringBuilder sb = new StringBuilder();
         sb.append(tag);
         sb.append(":");

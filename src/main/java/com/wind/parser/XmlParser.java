@@ -1,3 +1,4 @@
+
 package com.wind.parser;
 
 import org.xml.sax.Attributes;
@@ -25,9 +26,8 @@ import jxl.Cell;
 import jxl.Sheet;
 
 /**
- * Created by sunhuihui on 2015/11/12.
- * 1.解析excel中各单元格的数据并存为{@link PersistObjectBase}
- * 2.保存{@link PersistObjectBase}所有信息到XML中。
+ * Created by sunhuihui on 2015/11/12. 1.解析excel中各单元格的数据并存为
+ * {@link PersistObjectBase} 2.保存{@link PersistObjectBase}所有信息到XML中。
  */
 public class XmlParser {
     private static final String XMLPATH = "excel_prop.xml";
@@ -68,7 +68,7 @@ public class XmlParser {
      * 初始化输出格式及xml中对应的节点{@link #mRootElement},{@link #mChildElement}.
      * {@link #mSrcFile}{@link #mOutFile}
      *
-     * @param format {@link PersistFormat#APN} {@link  PersistFormat#SPN}
+     * @param format {@link PersistFormat#APN} {@link PersistFormat#SPN}
      */
     public void initParameters(PersistFormat format) {
         // init resource dir
@@ -131,7 +131,7 @@ public class XmlParser {
      */
     public Collection<PersistObjectBase> parseXml(Sheet sheet) throws UnSpecifiedFormatException {
         int allRows = sheet.getRows();
-//        allRows = 14;
+        // allRows = 6;
         // The purpose using hashset is for removing the duplicate object.
         HashSet<PersistObjectBase> objects = new HashSet<>(allRows);
         for (int i = 1; i < allRows; i++) {
@@ -148,14 +148,13 @@ public class XmlParser {
                 String content = c.getContents();
                 pb.bindInfo(columnIndex, content);
             }
-
             pb.sortAllAttribute();
 
             // Mnc contains multi mnc. Split it.
             if (pb.isNeedSplit()) {
-                objects.addAll(pb.splitByMnc());
+                objects.addAll(pb.split());
             } else {
-                //add new apn into list.
+                // add new apn into list.
                 objects.add(pb);
             }
         }
@@ -173,11 +172,12 @@ public class XmlParser {
     /**
      * 把｛@link PersistObjectBase}对象序列化为XML格式。
      *
-     * @param fos  the output stream for out file
+     * @param fos the output stream for out file
      * @param pobs the collection contained the persisted object.
      */
-    public void buildOutXml(FileOutputStream fos, Collection<? extends PersistObjectBase> pobs) throws SAXException {
-        Result resultXml = new StreamResult(fos); //xml
+    public void buildOutXml(FileOutputStream fos, Collection<? extends PersistObjectBase> pobs)
+            throws SAXException {
+        Result resultXml = new StreamResult(fos); // xml
         SAXTransformerFactory factory = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
         try {
             TransformerHandler th = factory.newTransformerHandler();
@@ -185,9 +185,9 @@ public class XmlParser {
 
             // Set format for XML.
             Transformer transformer = th.getTransformer();
-            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8"); //编码格式是UTF-8
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8"); // 编码格式是UTF-8
             transformer.setOutputProperty(OutputKeys.VERSION, "1.0");
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes"); //换行
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes"); // 换行
 
             th.startDocument();
             // root tag begin
@@ -199,7 +199,7 @@ public class XmlParser {
 
             // 将PersistObjectBase序列化为child elements.
             for (PersistObjectBase objectBase : pobs) {
-                //合并 mcc mnc
+                // 合并 mcc mnc
                 if (objectBase instanceof SpnObject) {
                     ((SpnObject) objectBase).mergerMccMnc();
                 }
@@ -213,7 +213,7 @@ public class XmlParser {
 
             // root tag end
             th.endElement("", "", mRootElement); //
-            th.endDocument(); //结束xml文档
+            th.endDocument(); // 结束xml文档
         } catch (TransformerConfigurationException e) {
             e.printStackTrace();
         }
@@ -235,7 +235,8 @@ public class XmlParser {
         }
 
         @Override
-        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+        public void startElement(String uri, String localName, String qName, Attributes attributes)
+                throws SAXException {
             boolean isSet = false;
             if (qName.equals("apntag") && mPersistFormat == PersistFormat.APN) {
                 isSet = true;

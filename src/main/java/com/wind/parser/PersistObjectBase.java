@@ -1,3 +1,4 @@
+
 package com.wind.parser;
 
 import org.xml.sax.helpers.AttributesImpl;
@@ -7,8 +8,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by sunhuihui on 2015/11/12.
- * SPN或APN对象的基类，抽象出了{@link #bindInfo} {@link #addPersist(PersistAttribute)}
+ * Created by sunhuihui on 2015/11/12. SPN或APN对象的基类，抽象出了{@link #bindInfo}
+ * {@link #addPersist(PersistAttribute)}
  */
 public abstract class PersistObjectBase implements Cloneable {
 
@@ -51,8 +52,8 @@ public abstract class PersistObjectBase implements Cloneable {
     }
 
     /**
-     * 对于SPN和APN绑定方式不一定，分别实现，绑定信息后，
-     * 把每个字段保存{@link #addPersist}{@link #mAllAttributeSaved}
+     * 对于SPN和APN绑定方式不一定，分别实现，绑定信息后， 把每个字段保存{@link #addPersist}
+     * {@link #mAllAttributeSaved}
      *
      * @param index
      * @param text
@@ -85,8 +86,10 @@ public abstract class PersistObjectBase implements Cloneable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         PersistObjectBase that = (PersistObjectBase) o;
 
@@ -99,22 +102,17 @@ public abstract class PersistObjectBase implements Cloneable {
         return mAllAttributeSaved.hashCode();
     }
 
-    //Fixme
     public String getMnc() {
         return mMnc;
     }
 
     public void setMnc(String mnc) {
-        for (PersistAttribute ap : mAllAttributeSaved) {
-            if (ap.index == mNameIndexMapping.getMncIndex()) {
-                ap.value = mnc;
-            }
-        }
+        mAllAttributeSaved.stream().filter(ap -> ap.index == mNameIndexMapping.getMncIndex())
+                .forEach(ap -> ap.value = mnc);
         mMnc = mnc;
     }
 
     /**
-     * TODO 需要完成对MCC的分割
      * 判断MCC或是MNC是否需要分割为多个
      *
      * @return
@@ -124,8 +122,7 @@ public abstract class PersistObjectBase implements Cloneable {
     }
 
     /**
-     * 判断内容是否需要分割，主要是考虑到多mcc与mnc的分割.
-     * 目前分割方式主要是:{@link #SPLIT_FLAG}，可以在数组中自己添加
+     * 判断内容是否需要分割，主要是考虑到多mcc与mnc的分割. 目前分割方式主要是:{@link #SPLIT_FLAG}，可以在数组中自己添加
      *
      * @param text
      * @return
@@ -141,30 +138,76 @@ public abstract class PersistObjectBase implements Cloneable {
         return false;
     }
 
-    public List<PersistObjectBase> splitByMnc() {
-        List<PersistObjectBase> tempApns = new ArrayList<PersistObjectBase>();
-        String[] mncStrings = mMnc.split(SPLIT_FLAG);
-        if (mncStrings != null && mncStrings.length != 0) {
-            for (String mnc : mncStrings) {
-                try {
-                    PersistObjectBase newApn = (PersistObjectBase) this.clone();
+    /**
+     * First step split it by mcc, next split by mnc.
+     * 
+     * @param tempPob Split result saved here.
+     * @throws CloneNotSupportedException
+     */
+    private void splitByMcc(List<PersistObjectBase> tempPob) throws CloneNotSupportedException {
+        List<PersistObjectBase> temp = new ArrayList<>();
+        String[] mccString = mMcc.split(SPLIT_FLAG);
+        for (String mcc : mccString) {
+            PersistObjectBase newApn = this.clone();
+            newApn.setMcc(mcc);
+            temp.add(newApn);
+        }
+        // Split it again for the tempApns by mnc.
+        if (containSeparate(mMnc)) {
+            for (PersistObjectBase pob : temp) {
+                String[] mncStrings = pob.getMnc().split(SPLIT_FLAG);
+                for (String mnc : mncStrings) {
+                    PersistObjectBase newApn = pob.clone();
                     newApn.setMnc(mnc);
-                    tempApns.add(newApn);
-                } catch (CloneNotSupportedException e) {
-                    e.printStackTrace();
+                    tempPob.add(newApn);
                 }
             }
+        } else {
+            tempPob.addAll(temp);
         }
-        return tempApns;
+    }
+
+    /**
+     * @param tempPob Split result saved here.
+     */
+    private void splitByMnc(List<PersistObjectBase> tempPob) throws CloneNotSupportedException {
+        String[] mncStrings = mMnc.split(SPLIT_FLAG);
+        for (String mnc : mncStrings) {
+            PersistObjectBase newApn = this.clone();
+            newApn.setMnc(mnc);
+            tempPob.add(newApn);
+        }
+    }
+
+    public List<PersistObjectBase> split() {
+        List<PersistObjectBase> tempPob = new ArrayList<>();
+        try {
+            // split by mcc first
+            if (containSeparate(mMcc)) {
+                splitByMcc(tempPob);
+            } else {
+                // Only split by mnc.
+                splitByMnc(tempPob);
+            }
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return tempPob;
     }
 
     @Override
     protected PersistObjectBase clone() throws CloneNotSupportedException {
         PersistObjectBase pb = (PersistObjectBase) super.clone();
         // 对于list中内容需要深clone
-        pb.mAllAttributeSaved = (ArrayList) pb.mAllAttributeSaved.clone();
+        pb.mAllAttributeSaved = new ArrayList<>();
+        for (PersistAttribute pa : mAllAttributeSaved)
+            pb.mAllAttributeSaved.add(pa.clone());
         return pb;
     }
 
+    public void setMcc(String mcc) {
+        mAllAttributeSaved.stream().filter(ap -> ap.index == mNameIndexMapping.getMccIndex())
+                .forEach(ap -> ap.value = mcc);
+        mMcc = mcc;
+    }
 }
-

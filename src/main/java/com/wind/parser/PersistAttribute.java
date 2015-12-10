@@ -1,4 +1,7 @@
+
 package com.wind.parser;
+
+import com.sun.istack.internal.NotNull;
 
 /**
  * Created by sunhuihui on 2015/11/12.
@@ -38,7 +41,7 @@ public class PersistAttribute implements Comparable<PersistAttribute>, Cloneable
         return (PersistAttribute) super.clone();
     }
 
-    @Override
+    @Override @NotNull
     public int compareTo(PersistAttribute o) {
         return this.index - o.index;
     }

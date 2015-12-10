@@ -1,3 +1,4 @@
+
 package com.wind.parser;
 
 import java.util.Iterator;
@@ -26,11 +27,10 @@ public class SpnObject extends PersistObjectBase {
     }
 
     /**
-     * PLMN,MCC MNC是分开存储的，结果需要把mcc mnc合并为一个numeric，
-     * 在序列化XML时，再将Mccmnc合并。
+     * PLMN,MCC MNC是分开存储的，结果需要把mcc mnc合并为一个numeric， 在序列化XML时，再将Mccmnc合并。
      */
     protected void mergerMccMnc() {
-        //merge mcc and mcc to numeric
+        // merge mcc and mcc to numeric
         Iterator<PersistAttribute> iterator = mAllAttributeSaved.iterator();
         String mcc = null;
         String mnc = null;
