@@ -74,6 +74,7 @@ public class XmlParser {
         // init resource dir
         MODULE_RESOURCE_DIR = System.getProperty("user.dir") + "/ParserTools/src/main/resources";
 
+        ParserUtils.log(TAG,"MODULE_RESOURCE_DIR = "+MODULE_RESOURCE_DIR);
         mPersistFormat = format;
         mNameIndexMapping.setFormat(mPersistFormat);
         switch (format) {
@@ -199,6 +200,11 @@ public class XmlParser {
 
             // 将PersistObjectBase序列化为child elements.
             for (PersistObjectBase objectBase : pobs) {
+                // Check PersistObjectBase validity
+                if (!objectBase.isValid()) {
+                    continue;
+                }
+
                 // 合并 mcc mnc
                 if (objectBase instanceof SpnObject) {
                     ((SpnObject) objectBase).mergerMccMnc();

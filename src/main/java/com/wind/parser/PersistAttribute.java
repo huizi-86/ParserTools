@@ -1,8 +1,6 @@
 
 package com.wind.parser;
 
-import com.sun.istack.internal.NotNull;
-
 /**
  * Created by sunhuihui on 2015/11/12.
  * 对应Apn或spn中的每个属性
@@ -41,7 +39,7 @@ public class PersistAttribute implements Comparable<PersistAttribute>, Cloneable
         return (PersistAttribute) super.clone();
     }
 
-    @Override @NotNull
+    @Override
     public int compareTo(PersistAttribute o) {
         return this.index - o.index;
     }

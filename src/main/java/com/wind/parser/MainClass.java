@@ -21,7 +21,8 @@ public class MainClass {
 
     public static void main(String[] args) {
         MainClass mc = new MainClass();
-        mc.constructXml(PersistFormat.SPN);
+//        mc.constructXml(PersistFormat.SPN);
+        mc.constructXml(PersistFormat.APN);
     }
 
     void constructXml(PersistFormat format) {
