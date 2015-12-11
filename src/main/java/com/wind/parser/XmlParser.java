@@ -195,10 +195,12 @@ public class XmlParser {
             AttributesImpl attr = new AttributesImpl();
 
             newLine(th);
+            attr.addAttribute(null, null, "version", null, mPersistFormat.getVersion());
             th.startElement(null, null, mRootElement, attr);
             newLine(th);
 
             // 将PersistObjectBase序列化为child elements.
+            attr.clear();
             for (PersistObjectBase objectBase : pobs) {
                 // Check PersistObjectBase validity
                 if (!objectBase.isValid()) {
