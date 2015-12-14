@@ -6,10 +6,10 @@ package com.wind.parser;
  */
 public enum PersistFormat {
     /**
-     * Now apn 's version is 1.0.
-     * spn's version is 8.
+     * Now apn's version is 8.
+     * spn's version is 1.
      */
-    SPN(8), APN(1);
+    SPN(1), APN(8);
     private int mVersion;
 
     PersistFormat(int version) {
