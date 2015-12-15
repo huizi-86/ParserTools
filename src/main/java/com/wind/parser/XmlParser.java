@@ -1,6 +1,8 @@
 
 package com.wind.parser;
 
+import com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -74,7 +76,7 @@ public class XmlParser {
         // init resource dir
         MODULE_RESOURCE_DIR = System.getProperty("user.dir") + "/ParserTools/src/main/resources";
 
-        ParserUtils.log(TAG,"MODULE_RESOURCE_DIR = "+MODULE_RESOURCE_DIR);
+        ParserUtils.log(TAG, "MODULE_RESOURCE_DIR = " + MODULE_RESOURCE_DIR);
         mPersistFormat = format;
         mNameIndexMapping.setFormat(mPersistFormat);
         switch (format) {
@@ -162,6 +164,7 @@ public class XmlParser {
         return objects;
     }
 
+    @Deprecated
     private void newLine(TransformerHandler th) {
         try {
             th.characters(newLine.toCharArray(), 0, newLine.length());
@@ -181,23 +184,26 @@ public class XmlParser {
         Result resultXml = new StreamResult(fos); // xml
         SAXTransformerFactory factory = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
         try {
+            factory.setAttribute(TransformerFactoryImpl.INDENT_NUMBER, 10);
             TransformerHandler th = factory.newTransformerHandler();
-            th.setResult(resultXml);
 
             // Set format for XML.
             Transformer transformer = th.getTransformer();
             transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8"); // 编码格式是UTF-8
             transformer.setOutputProperty(OutputKeys.VERSION, "1.0");
             transformer.setOutputProperty(OutputKeys.INDENT, "yes"); // 换行
+            transformer.setOutputProperty(OutputKeys.METHOD,"xml");
 
+            /*
+              It must be called after setOutputProperty.
+             */
+            th.setResult(resultXml);
             th.startDocument();
             // root tag begin
             AttributesImpl attr = new AttributesImpl();
 
-            newLine(th);
             attr.addAttribute(null, null, "version", null, mPersistFormat.getVersion());
             th.startElement(null, null, mRootElement, attr);
-            newLine(th);
 
             // 将PersistObjectBase序列化为child elements.
             attr.clear();
@@ -215,8 +221,6 @@ public class XmlParser {
                 objectBase.bindAttribute(attr);
                 th.startElement("", "", mChildElement, attr);
                 th.endElement("", "", mChildElement);
-
-                newLine(th);
             }
 
             // root tag end
@@ -270,4 +274,5 @@ public class XmlParser {
             super.characters(ch, start, length);
         }
     }
+
 }
