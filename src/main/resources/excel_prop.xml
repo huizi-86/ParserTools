@@ -22,8 +22,8 @@
         <apntag name="apnType" index="15"/>
 
         <!--以下为虚拟运营商-->
-        <apntag name="mvno_typeype" index="-1"/>
-        <apntag name="mvno_match_data" index="-1"/>
+        <apntag name="mvno_typeype" index="16"/>
+        <apntag name="mvno_match_data" index="17"/>
     </apn>
 
     <spn>

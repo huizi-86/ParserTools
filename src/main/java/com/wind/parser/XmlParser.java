@@ -141,7 +141,7 @@ public class XmlParser {
             // All cells at a row.
             Cell[] rows_cells = sheet.getRow(i);
             PersistObjectBase pb = getPersistObject();
-
+            pb.mRow = i;
             for (Cell c : rows_cells) {
                 int columnIndex = c.getColumn();
                 // Break this row if more than max index.
@@ -149,6 +149,8 @@ public class XmlParser {
                     break;
                 }
                 String content = c.getContents();
+
+                content = ParserUtils.filterInvalidChars(content);
                 pb.bindInfo(columnIndex, content);
             }
             pb.sortAllAttribute();

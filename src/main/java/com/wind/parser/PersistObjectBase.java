@@ -12,10 +12,11 @@ import java.util.List;
  */
 public abstract class PersistObjectBase implements Cloneable {
 
+    public int mRow; // help to debug error.
     /**
      * 可以在数组中自己添加更多的分割符
      */
-    private static final String SPLIT_FLAG = "[,/]";
+    private static final String SPLIT_FLAG = ParserUtils.SPLIT_FLAG;
     private static final String TAG = "PersistObjectBase";
     protected NameIndexMapping mNameIndexMapping;
     protected String mMnc, mMcc;
@@ -233,7 +234,6 @@ public abstract class PersistObjectBase implements Cloneable {
                 Integer.parseInt(mMcc);
                 Integer.parseInt(mMnc);
             } catch (NumberFormatException e) {
-                e.printStackTrace();
                 ParserUtils.log(TAG, "mcc or mnc must be number <" + mMcc + " , " + mMnc + ">");
                 return false;
             }
