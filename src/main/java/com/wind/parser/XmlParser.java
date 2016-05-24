@@ -208,8 +208,8 @@ public class XmlParser {
             th.startElement(null, null, mRootElement, attr);
 
             // 将PersistObjectBase序列化为child elements.
-            attr.clear();
             for (PersistObjectBase objectBase : pobs) {
+                attr.clear();
                 // Check PersistObjectBase validity
                 if (!objectBase.isValid()) {
                     continue;

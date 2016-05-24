@@ -141,12 +141,18 @@ public abstract class PersistObjectBase implements Cloneable {
      * @return
      */
     private boolean containSeparate(String text) {
-        for (int i = 0; i < text.length(); i++) {
-            char ch = text.charAt(i);
-            for (int j = 0; j < SPLIT_FLAG.length(); j++) {
-                if (SPLIT_FLAG.charAt(j) == ch)
-                    return true;
+        // These try blockes are for debug.
+        try {
+            for (int i = 0; i < text.length(); i++) {
+                char ch = text.charAt(i);
+                for (int j = 0; j < SPLIT_FLAG.length(); j++) {
+                    if (SPLIT_FLAG.charAt(j) == ch)
+                        return true;
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("row="+mRow);
         }
         return false;
     }
